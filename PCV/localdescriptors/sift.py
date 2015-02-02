@@ -15,7 +15,11 @@ def process_image(imagename,resultname,params="--edge-thresh 10 --peak-thresh 5"
 
     cmmd = str("sift "+imagename+" --output="+resultname+
                 " "+params)
+    print cmmd
     os.system(cmmd)
+    # import subprocess
+    # ls_output = subprocess.check_output(cmmd.split())
+    # print "subproce", ls_output
     print 'processed', imagename, 'to', resultname
 
 
