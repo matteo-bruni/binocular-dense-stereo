@@ -16,13 +16,13 @@ points2D = [loadtxt('dataset_merton/2D/00'+str(i+1)+'.corners').T for i in range
 # load 3D points
 points3D = loadtxt('dataset_merton/3D/p3d').T
 # load correspondences
-corr = genfromtxt('dataset_merton/2D/nview-corners',dtype='int',missing='*')
+corr = genfromtxt('dataset_merton/2D/nview-corners', dtype='int', missing='*')
 # load cameras to a list of Camera objects
 P = [camera.Camera(loadtxt('dataset_merton/2D/00'+str(i+1)+'.P')) for i in range(3)]
 
 
 # make 3D points homogeneous and project
-X = vstack( (points3D, ones(points3D.shape[1])) )
+X = vstack((points3D, ones(points3D.shape[1])))
 x = P[0].project(X)
 
 
@@ -50,5 +50,5 @@ x = P[0].project(X)
 from mpl_toolkits.mplot3d import axes3d
 fig = figure()
 ax = fig.gca(projection='3d')
-ax.plot(points3D[0],points3D[1],points3D[2],'k.')
+ax.plot(points3D[0], points3D[1], points3D[2], 'k.')
 show()
