@@ -26,9 +26,11 @@ print "sift.. done"
 
 print "match features..."
 # match features
-matches = sift.match_twosided(d1,d2)
+print "\tsearching matches"
+matches = sift.match_twosided(d1, d2)
 ndx = matches.nonzero()[0]
 # make homogeneous and normalize with inv(K)
+print "\tmake homogeneous and normalize with inv(K)"
 x1 = homography.make_homog(l1[ndx,:2].T)
 ndx2 = [int(matches[i]) for i in ndx]
 x2 = homography.make_homog(l2[ndx2,:2].T)
@@ -39,7 +41,7 @@ x2n = dot(inv(K), x2)
 print "estimate E with RANSAC"
 # estimate E with RANSAC
 model = sfm.RansacModel()
-E,inliers = sfm.F_from_ransac(x1n,x2n,model)
+E, inliers = sfm.F_from_ransac(x1n,x2n,model)
 # compute camera matrices (P2 will be list of four solutions)
 P1 = array([[1,0,0,0],[0,1,0,0],[0,0,1,0]])
 P2 = sfm.compute_P_from_essential(E)
@@ -63,6 +65,7 @@ X = sfm.triangulate(x1n[:,inliers],x2n[:,inliers],P1,P2[ind])
 X = X[:,infront]
 
 
+print "3D Plot"
 # 3D plot
 from mpl_toolkits.mplot3d import axes3d
 fig = figure()
@@ -73,6 +76,7 @@ axis('off')
 
 # plot the projection of X
 
+print "project 3D points"
 # project 3D points
 cam1 = camera.Camera(P1)
 cam2 = camera.Camera(P2[ind])
