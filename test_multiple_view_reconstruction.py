@@ -11,15 +11,20 @@ from PCV.localdescriptors import sift
 
 K = array([[2394, 0, 932], [0, 2398, 628], [0, 0, 1]])
 
+print "computing sift.."
 # load images and compute features
-im1 = array(Image.open('dataset_alcatraz/San_Francisco_2315.jpg'))
-sift.process_image('dataset_alcatraz/San_Francisco_2315.jpg', 'im1.sift')
-l1, d1 = sift.read_features_from_file('im1.sift')
+im1 = array(Image.open('dataset_alcatraz/alcatraz1.jpg'))
+sift.process_image('dataset_alcatraz/alcatraz1.jpg', 'dataset_alcatraz/alcatraz1.sift')
+l1, d1 = sift.read_features_from_file('dataset_alcatraz/alcatraz1.sift')
 
-im2 = array(Image.open('dataset_alcatraz/San_Francisco_2316.jpg'))
-sift.process_image('dataset_alcatraz/San_Francisco_2316.jpg', 'im2.sift')
-l2, d2 = sift.read_features_from_file('im2.sift')
+im2 = array(Image.open('dataset_alcatraz/alcatraz2.jpg'))
+sift.process_image('dataset_alcatraz/alcatraz2.jpg', 'dataset_alcatraz/alcatraz2.sift')
+l2, d2 = sift.read_features_from_file('dataset_alcatraz/alcatraz2.sift')
 
+print "sift.. done"
+
+
+print "match features..."
 # match features
 matches = sift.match_twosided(d1,d2)
 ndx = matches.nonzero()[0]
@@ -27,9 +32,11 @@ ndx = matches.nonzero()[0]
 x1 = homography.make_homog(l1[ndx,:2].T)
 ndx2 = [int(matches[i]) for i in ndx]
 x2 = homography.make_homog(l2[ndx2,:2].T)
-x1n = dot(inv(K),x1)
-x2n = dot(inv(K),x2)
+print "\tinverting .."
+x1n = dot(inv(K), x1)
+x2n = dot(inv(K), x2)
 
+print "estimate E with RANSAC"
 # estimate E with RANSAC
 model = sfm.RansacModel()
 E,inliers = sfm.F_from_ransac(x1n,x2n,model)
@@ -37,7 +44,7 @@ E,inliers = sfm.F_from_ransac(x1n,x2n,model)
 P1 = array([[1,0,0,0],[0,1,0,0],[0,0,1,0]])
 P2 = sfm.compute_P_from_essential(E)
 
-
+print "pick the solution with points in front of cameras"
 # pick the solution with points in front of cameras
 ind = 0
 maxres = 0
