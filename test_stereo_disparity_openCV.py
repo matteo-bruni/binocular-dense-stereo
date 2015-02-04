@@ -22,7 +22,7 @@
 # '''
 #
 # def write_ply(fn, verts, colors):
-#     verts = verts.reshape(-1, 3)
+# verts = verts.reshape(-1, 3)
 #     colors = colors.reshape(-1, 3)
 #     verts = np.hstack([verts, colors])
 #     with open(fn, 'w') as f:
@@ -103,7 +103,6 @@ import scipy.spatial
 
 
 def getDisparity(imgLeft, imgRight, method="BM"):
-
     gray_left = cv2.cvtColor(imgLeft, cv.CV_BGR2GRAY)
     gray_right = cv2.cvtColor(imgRight, cv.CV_BGR2GRAY)
     print gray_left.shape
@@ -118,7 +117,7 @@ def getDisparity(imgLeft, imgRight, method="BM"):
         sbm.minDisparity = 0
         sbm.numberOfDisparities = 16
         sbm.textureThreshold = 0
-        sbm.uniquenessRatio= 0
+        sbm.uniquenessRatio = 0
         sbm.speckleRange = 2
         sbm.speckleWindowSize = 100
 
@@ -132,10 +131,10 @@ def getDisparity(imgLeft, imgRight, method="BM"):
 
     elif method == "SGBM":
         sbm = cv2.StereoSGBM()
-        sbm.SADWindowSize = 5; #Matched block size. It must be an odd number >=1 . Normally, it should be somewhere in the 3..11 range.
-        sbm.numberOfDisparities = 16;#con valori piu alti tipo 112 viene il contorno nero
+        sbm.SADWindowSize = 5;  #Matched block size. It must be an odd number >=1 . Normally, it should be somewhere in the 3..11 range.
+        sbm.numberOfDisparities = 16;  #con valori piu alti tipo 112 viene il contorno nero
         sbm.preFilterCap = 1;
-        sbm.minDisparity = 0; #con altri valori smongola
+        sbm.minDisparity = 0;  #con altri valori smongola
         sbm.uniquenessRatio = 7;
         sbm.speckleWindowSize = 100;
         sbm.speckleRange = 2;
@@ -146,6 +145,7 @@ def getDisparity(imgLeft, imgRight, method="BM"):
         disparity_visual = cv2.normalize(disparity, alpha=0, beta=255, norm_type=cv2.cv.CV_MINMAX, dtype=cv2.cv.CV_8U)
 
     return disparity_visual
+
 
 imgLeft = ( cv2.imread('dataset_tsukuba/scene1.row3.col3.ppm') )
 imgRight = ( cv2.imread('dataset_tsukuba/scene1.row3.col4.ppm') )
