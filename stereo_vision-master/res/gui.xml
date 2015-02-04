@@ -1,0 +1,823 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <!-- interface-requires gtk+ 3.0 -->
+    <object class="GtkAssistant" id="main">
+        <property name="title">OpenCV Stereo Vision</property>
+        <property name="default_width">600</property>
+        <property name="default_height">500</property>
+        <property name="has_resize_grip">False</property>
+        <child>
+            <object class="GtkBox" id="page_calibration_box">
+                <property name="orientation">vertical</property>
+                <child>
+                    <object class="GtkBox" id="page_calibration_live_box">
+                        <property name="orientation">vertical</property>
+                        <child>
+                            <object class="GtkRadioButton" id="calibration_live_radio">
+                                <property name="label">Live Calibration</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkGrid" id="page_calibration_live_grid">
+                                <child>
+                                    <object class="GtkLabel" id="page_calibration_left_label">
+                                        <property name="label">Left Camera:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">0</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="left_camera_spin">
+                                        <property name="numeric">true</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">0</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="page_calibration_right_label">
+                                        <property name="label">Right Camera:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="right_camera_spin">
+                                        <property name="numeric">true</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="page_calibration_frame_width_label">
+                                        <property name="label">Frame Width:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="frame_width_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="page_calibration_frame_height_label">
+                                        <property name="label">Frame Height:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">3</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="frame_height_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">3</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkSeparator" id="page_calibration_separator1">
+                        <property name="orientation">horizontal</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkRadioButton" id="load_points_radio">
+                        <property name="label">Load points from file</property>
+                        <property name="group">calibration_live_radio</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkFileChooserButton" id="load_points_button">
+                        <property name="title">Choose points file</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkSeparator" id="page_calibration_separator2">
+                        <property name="orientation">horizontal</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkRadioButton" id="load_params_radio">
+                        <property name="label">Load camera parameters from file</property>
+                        <property name="group">calibration_live_radio</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkFileChooserButton" id="load_params_button">
+                        <property name="title">Choose parameter file</property>
+                    </object>
+                </child>
+            </object>
+            <packing>
+                <property name="page_type">intro</property>
+                <property name="title">Calibration Setup</property>
+                <property name="complete">True</property>
+            </packing>
+        </child>
+        <child>
+            <object class="GtkGrid" id="page_snap_grid">
+                <child>
+                    <object class="GtkLabel" id="page_snap_pattern_label">
+                        <property name="label">Calibration Pattern:</property>
+                    </object>
+                    <packing>
+                        <property name="top_attach">0</property>
+                        <property name="left_attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkComboBoxText" id="page_snap_pattern">
+                    </object>
+                    <packing>
+                        <property name="top_attach">0</property>
+                        <property name="left_attach">1</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="page_snap_width_label">
+                        <property name="label">Pattern Width:</property>
+                    </object>
+                    <packing>
+                        <property name="top_attach">1</property>
+                        <property name="left_attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkSpinButton" id="pattern_width_spin">
+                        <property name="numeric">True</property>
+                    </object>
+                    <packing>
+                        <property name="top_attach">1</property>
+                        <property name="left_attach">1</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="page_snap_height_label">
+                        <property name="label">Pattern Height:</property>
+                    </object>
+                    <packing>
+                        <property name="top_attach">2</property>
+                        <property name="left_attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkSpinButton" id="pattern_height_spin">
+                        <property name="numeric">True</property>
+                    </object>
+                    <packing>
+                        <property name="top_attach">2</property>
+                        <property name="left_attach">1</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkSeparator" id="page_snap_separator1">
+                        <property name="orientation">horizontal</property>
+                    </object>
+                    <packing>
+                        <property name="top_attach">3</property>
+                        <property name="left_attach">0</property>
+                        <property name="width">2</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="page_snap_count_label">
+                        <property name="label">Images captured:</property>
+                    </object>
+                    <packing>
+                        <property name="top_attach">4</property>
+                        <property name="left_attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkEntry" id="snap_count_entry">
+                        <property name="editable">False</property>
+                        <property name="text">0</property>
+                    </object>
+                    <packing>
+                        <property name="top_attach">4</property>
+                        <property name="left_attach">1</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkButton" id="snap_button">
+                        <property name="label">Snap image</property>
+                    </object>
+                    <packing>
+                        <property name="top_attach">5</property>
+                        <property name="left_attach">0</property>
+                        <property name="width">2</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkButton" id="save_points_button">
+                        <property name="label">Save points to file</property>
+                    </object>
+                    <packing>
+                        <property name="top_attach">6</property>
+                        <property name="left_attach">0</property>
+                        <property name="width">2</property>
+                    </packing>
+                </child>
+            </object>
+            <packing>
+                <property name="page_type">content</property>
+                <property name="title">Capturing Calibration Images</property>
+                <property name="complete">True</property>
+            </packing>
+        </child>
+        <child>
+            <object class="GtkBox" id="page_calibrating_box">
+                <property name="orientation">vertical</property>
+                <child>
+                    <object class="GtkProgressBar" id="calibrating_progress">
+                        <property name="show_text">True</property>
+                        <property name="text">Calibrating left camera</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="save_params_button">
+                        <property name="label">Save camera parameters to file</property>
+                    </object>
+                </child>
+            </object>
+            <packing>
+                <property name="page_type">progress</property>
+                <property name="title">Calibrating Cameras</property>
+            </packing>
+        </child>
+        <child>
+            <object class="GtkBox" id="page_stereo_box">
+                <property name="orientation">vertical</property>
+                <child>
+                    <object class="GtkCheckButton" id="rectify_check">
+                        <property name="label">Rectify Image</property>
+                        <property name="active">True</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkNotebook" id="stereo_notebook">
+                        <child>
+                            <object class="GtkGrid" id="page_stereo_tab_stereobm">
+                                <child>
+                                    <object class="GtkLabel" id="stereobm_preset_label">
+                                        <property name="label">Preset:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">0</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkComboBoxText" id="stereobm_preset_combo">
+                                        <property name="hexpand">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">0</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereobm_ndisparity_label">
+                                        <property name="label">Disparity Range:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereobm_ndisparity_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereobm_sad_label">
+                                        <property name="label">SAD Window Size:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereobm_sad_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                            </object>
+                        </child>
+                        <child type="tab">
+                            <object class="GtkLabel" id="page_stereo_tab_label_stereobm">
+                                <property name="label">StereoBM</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkGrid" id="page_stereo_tab_stereosgbm">
+                                <child>
+                                    <object class="GtkLabel" id="stereosgbm_mindisparity_label">
+                                        <property name="label">Minimum Disparity:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">0</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereosgbm_mindisparity_spin">
+                                        <property name="hexpand">True</property>
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">0</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereosgbm_ndisparity_label">
+                                        <property name="label">Disparity Range:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereosgbm_ndisparity_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereosgbm_sad_label">
+                                        <property name="label">SAD Window Size:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereosgbm_sad_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereosgbm_p1_label">
+                                        <property name="label">P1:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">3</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereosgbm_p1_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">3</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereosgbm_p2_label">
+                                        <property name="label">P2:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">4</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereosgbm_p2_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">4</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereosgbm_disp12maxdiff_label">
+                                        <property name="label">Maximum left-right disparity:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">5</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereosgbm_disp12maxdiff_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">5</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereosgbm_prefiltercap_label">
+                                        <property name="label">Prefilter Truncation Value:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">6</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereosgbm_prefiltercap_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">6</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereosgbm_uniquenessratio_label">
+                                        <property name="label">Uniqueness Ratio:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">7</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereosgbm_uniquenessratio_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">7</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereosgbm_specklewindowsize_label">
+                                        <property name="label">Speckle Window Size:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">8</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereosgbm_specklewindowsize_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">8</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereosgbm_specklerange_label">
+                                        <property name="label">Speckle Range:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">9</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereosgbm_specklerange_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">9</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkCheckButton" id="stereosgbm_fulldp_check">
+                                        <property name="label">Run full-scale two-pass algorithm</property>
+                                        <property name="active">False</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">10</property>
+                                        <property name="left_attach">0</property>
+                                        <property name="width">2</property>
+                                    </packing>
+                                </child>
+                            </object>
+                        </child>
+                        <child type="tab">
+                            <object class="GtkLabel" id="page_stereo_tab_label_stereosgbm">
+                                <property name="label">StereoSGBM</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkGrid" id="page_stereo_tab_stereovar">
+                                <child>
+                                    <object class="GtkLabel" id="stereovar_levels_label">
+                                        <property name="label">Number of Levels:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">0</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereovar_levels_spin">
+                                        <property name="hexpand">True</property>
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">0</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereovar_pyrscale_label">
+                                        <property name="label">Pyramid Image Scale</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereovar_pyrscale_spin">
+                                        <property name="numeric">True</property>
+                                        <property name="digits">2</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereovar_nit_label">
+                                        <property name="label">Number of Iterations</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereovar_nit_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereovar_mindisp_label">
+                                        <property name="label">Minimum Disparity:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">3</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereovar_mindisp_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">3</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereovar_maxdisp_label">
+                                        <property name="label">Maximum Disparity:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">4</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereovar_maxdisp_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">4</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereovar_polyn_label">
+                                        <property name="label">Size of Pixel Neighborhood</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">5</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereovar_polyn_spin">
+                                        <property name="numeric">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">5</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereovar_polysigma_label">
+                                        <property name="label">Standard Deviation of Pixel Neighborhood:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">6</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereovar_polysigma_spin">
+                                        <property name="numeric">True</property>
+                                        <property name="digits">2</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">6</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereovar_fi_label">
+                                        <property name="label">Smoothnes Parameter:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">7</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereovar_fi_spin">
+                                        <property name="numeric">True</property>
+                                        <property name="digits">2</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">7</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereovar_lambda_label">
+                                        <property name="label">Edge Smoothing Threshold:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">8</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="stereovar_lambda_spin">
+                                        <property name="numeric">True</property>
+                                        <property name="digits">2</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">8</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereovar_penalization_label">
+                                        <property name="label">Smoothness Penalization:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">9</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkComboBoxText" id="stereovar_penalization_combo">
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">9</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel" id="stereovar_cycle_label">
+                                        <property name="label">Type of Multigrid Cycle:</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">10</property>
+                                        <property name="left_attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkComboBoxText" id="stereovar_cycle_combo">
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">10</property>
+                                        <property name="left_attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkCheckButton" id="stereovar_initialdisparity_check">
+                                        <property name="label">Use input flow as initial approximation</property>
+                                        <property name="active">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">11</property>
+                                        <property name="left_attach">0</property>
+                                        <property name="width">2</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkCheckButton" id="stereovar_equalizehist_check">
+                                        <property name="label">Equalize histogram in pre-processing phase</property>
+                                        <property name="active">False</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">12</property>
+                                        <property name="left_attach">0</property>
+                                        <property name="width">2</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkCheckButton" id="stereovar_smartid_check">
+                                        <property name="label">Use the smart iteration distribution</property>
+                                        <property name="active">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">13</property>
+                                        <property name="left_attach">0</property>
+                                        <property name="width">2</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkCheckButton" id="stereovar_autoparams_check">
+                                        <property name="label">Use automatic parameters</property>
+                                        <property name="active">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">14</property>
+                                        <property name="left_attach">0</property>
+                                        <property name="width">2</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkCheckButton" id="stereovar_medianfiltering_check">
+                                        <property name="label">Use the median filter in post-processing</property>
+                                        <property name="active">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="top_attach">15</property>
+                                        <property name="left_attach">0</property>
+                                        <property name="width">2</property>
+                                    </packing>
+                                </child>
+                            </object>
+                        </child>
+                        <child type="tab">
+                            <object class="GtkLabel" id="page_stereo_tab_label_stereovar">
+                                <property name="label">StereoVar</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="page_stereo_save_button">
+                        <property name="label">Save stero parameters to file</property>
+                    </object>
+                </child>
+            </object>
+            <packing>
+                <property name="page_type">confirm</property>
+                <property name="title">Stereo Vision</property>
+                <property name="complete">True</property>
+            </packing>
+        </child>
+    </object>
+</interface>
