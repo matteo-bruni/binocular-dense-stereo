@@ -14,7 +14,7 @@ import vision
 from config import Config
 from camera import StereoCamera
 
-BUILDER_FILE = 'res/gui.xml'
+BUILDER_FILE = '../res/gui.xml'
 
 class Builder(Gtk.Builder):
     def get_object(self, key):
