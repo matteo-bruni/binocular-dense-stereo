@@ -6,7 +6,7 @@ from MVR import stereo
 im_l = array(Image.open('dataset_tsukuba/scene1.row3.col3.ppm').convert('L'), 'f')
 im_r = array(Image.open('dataset_tsukuba/scene1.row3.col4.ppm').convert('L'), 'f')
 # starting displacement and steps
-steps = 12
+steps = 10
 start = 4
 
 # width for ncc
