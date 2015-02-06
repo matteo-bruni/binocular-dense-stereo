@@ -71,9 +71,12 @@ def main():
 
     pre_rectify = np.hstack((img_left, img_right))
     after_rectify = np.hstack((left_rectified, right_rectified))
-    # total = np.vstack((pre_rectify, after_rectify))
-    cv2.imshow("PreRectify", pre_rectify)
-    cv2.imshow("AfterRectify", after_rectify)
+    total = np.vstack((pre_rectify, after_rectify))
+
+    cv2.imshow("PreAfterRectify", total)
+    #
+    # cv2.imshow("PreRectify", pre_rectify)
+    # cv2.imshow("AfterRectify", after_rectify)
 
     cv2.waitKey(0)
     cv2.destroyAllWindows()
