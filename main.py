@@ -17,12 +17,17 @@ def get_RT(parameter_mat, n_img_left, n_img_right):
     #     R.append(val)
     # R = np.array(R)
     # R = R.reshape(3, 3)
+    T1 = np.array(parameter_mat[n_img_left-1][9:12]).reshape(3, 1)
+    T2 = np.array(parameter_mat[n_img_right-1][9:12]).reshape(3, 1)
 
-    T = []
-    for i in range(3):
-        val = parameter_mat[n_img_right-1][i+9]-parameter_mat[n_img_left-1][i+9]
-        T.append(val)
-    T = np.array(T)
+
+    T = T1-(inv(R)*(T2))
+    print T.shape
+
+    # for i in range(3):
+    #     val = parameter_mat[n_img_right-1][i+9]-parameter_mat[n_img_left-1][i+9]
+    #     T.append(val)
+    # T = np.array(T)
 
     return R, T, R1, R2
 
@@ -75,7 +80,7 @@ def getDisparity(imgLeft, imgRight, method="BM"):
 
 # Choose images
 left_img_number = "01"
-right_img_number = "05"
+right_img_number = "02"
 
 imgLeft = (cv2.imread('dataset_templeRing/templeR00%s.png' % left_img_number))
 imgRight = (cv2.imread('dataset_templeRing/templeR00%s.png' % right_img_number))
@@ -117,8 +122,15 @@ parametri = np.delete(parametri, (0), axis=0)  #remove useless header
 # r_left and r_right are the original rotation matrix
 R, T, r_left, r_right = get_RT(parametri, int(left_img_number), int(right_img_number))
 
+
 # Compute stereo Rectification
 R1, R2, P1, P2, Q, roi1, roi2 = cv2.stereoRectify(K, d, K, d, (height, width), R, T, alpha=0)
+
+
+
+
+
+
 
 # Get map rectification
 map_left1, map_left2 = cv2.initUndistortRectifyMap(K, d, R1, P1, (height, width), cv2.CV_32FC1)

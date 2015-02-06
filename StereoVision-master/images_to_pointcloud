@@ -23,6 +23,7 @@ Tool for creating and exporting colored point clouds from stereo image pairs.
 import argparse
 
 import cv2
+
 from stereovision.blockmatchers import StereoBM, StereoSGBM
 from stereovision.calibration import StereoCalibration
 from stereovision.stereo_cameras import CalibratedPair
@@ -36,8 +37,8 @@ def main():
                                      "point clouds that can be viewed with "
                                      "MeshLab.", parents=[STEREO_BM_FLAG])
     parser.add_argument("calibration", help="Path to calibration folder.")
-    parser.add_argument("left", help="Path to left image")
-    parser.add_argument("right", help="Path to right image")
+    parser.add_argument("dataset_templeRing/templeR0001.png'", help="Path to left image")
+    parser.add_argument("dataset_templeRing/templeR0002.png'", help="Path to right image")
     parser.add_argument("output", help="Path to output file.")
     parser.add_argument("--bm_settings",
                         help="Path to block matcher's settings.")
