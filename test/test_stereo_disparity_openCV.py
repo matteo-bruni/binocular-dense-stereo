@@ -162,7 +162,3 @@ cv2.imshow("left", imgLeft)
 cv2.imshow("right", imgRight)
 cv2.waitKey(0)
 
-tri = scipy.spatial.qhull.Delaunay(disparity)
-print "triangulation done.."
-
-cv2.imshow(tri)
