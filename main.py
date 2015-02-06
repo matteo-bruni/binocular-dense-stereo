@@ -3,6 +3,37 @@ import cv2.cv as cv
 import sys
 import numpy as np
 import scipy.spatial
+from numpy.linalg import inv
+
+def get_RT(parameter_mat,n_img):
+
+    R = []
+    R1 = []
+    R2 = []
+
+    R1 = np.array(parameter_mat[0][0:9]).reshape(3,3)
+    R2 = np.array(parameter_mat[n_img-1][0:9]).reshape(3,3)
+
+
+
+    R = R2 * inv(R1)
+
+    # for i in range(9):
+    #     val = parametri[1][i]- parametri[0][i]
+    #     R.append(val)
+    # R = np.array(R)
+    # R = R.reshape(3, 3)
+
+    T = []
+    for i in range(3):
+        val = parameter_mat[n_img-1][i+9]-parameter_mat[0][i+9]
+        T.append(val)
+    T = np.array(T)
+
+    d1 = np.zeros((2, 2))
+    d2 = np.zeros((2, 2))
+
+    return R,T,d1,d2
 
 
 def getDisparity(imgLeft, imgRight, method="BM"):
@@ -79,34 +110,9 @@ for line in parameter_file:
 parametri = np.array(parametri)
 parametri = np.delete(parametri, (0), axis=0)  #remove useless header
 
-# print parametri
-R = []
-R1 = []
-R2 = []
+R,T,d1,d2 = get_RT(parametri,2)
 
-R1 = np.array(parametri[0][0:9]).reshape(3,3)
-R2 = np.array(parametri[1][0:9]).reshape(3,3)
 
-from numpy.linalg import inv
-
-R = R2 * inv(R1)
-print R
-# for i in range(9):
-#     val = parametri[1][i]- parametri[0][i]
-#     R.append(val)
-# R = np.array(R)
-# R = R.reshape(3, 3)
-
-T = []
-for i in range(3):
-    val = parametri[1][i+9]-parametri[0][i+9]
-    T.append(val)
-T = np.array(T)
-
-d1 = np.zeros((2, 2))
-d2 = np.zeros((2, 2))
-
-cv.StereoRectify(K,K,d1,d2,imgLeft.size,R,T)
 
 
 
