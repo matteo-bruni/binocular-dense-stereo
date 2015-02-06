@@ -81,11 +81,21 @@ parametri = np.delete(parametri, (0), axis=0)  #remove useless header
 
 # print parametri
 R = []
-for i in range(9):
-    val = parametri[1][i]- parametri[0][i]
-    R.append(val)
-R = np.array(R)
-R = R.reshape(3, 3)
+R1 = []
+R2 = []
+
+R1 = np.array(parametri[0][0:9]).reshape(3,3)
+R2 = np.array(parametri[1][0:9]).reshape(3,3)
+
+from numpy.linalg import inv
+
+R = R2 * inv(R1)
+print R
+# for i in range(9):
+#     val = parametri[1][i]- parametri[0][i]
+#     R.append(val)
+# R = np.array(R)
+# R = R.reshape(3, 3)
 
 T = []
 for i in range(3):
