@@ -6,7 +6,7 @@ import cv2
 from utils import get_rot_trans_matrix_img2_wrt_img1, get_disparity, rotate_img, write_ply
 
 
-ROTATE = False
+ROTATE = True
 
 def main():
     # Choose images
@@ -100,6 +100,7 @@ def main():
 
 
     cv2.imshow("PreAfterRectify", total)
+    # cv2.imshow("disparity", disparity)
     #
     # cv2.imshow("PreRectify", pre_rectify)
     # cv2.imshow("AfterRectify", after_rectify)
@@ -120,13 +121,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
 
 
 # #templeR0002.png 1520.400000 0.000000 302.320000 0.000000 1525.900000 246.870000 0.000000 0.000000 1.000000 0.00272557078828676410 0.98353557606148900000 -0.18069405603193772000 0.99651741905514424000 -0.01773058775937118300 -0.08147797111723514800 -0.08334029507718225500 -0.17984270037758626000 -0.98015865977776562000 -0.0288222339759 -0.0306361018019 0.525505113107
