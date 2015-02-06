@@ -50,8 +50,8 @@ def getDisparity(imgLeft, imgRight, method="BM"):
     return disparity_visual
 
 
-imgLeft = ( cv2.imread('dataset_templeRing/templeR0001.png') )
-imgRight = ( cv2.imread('dataset_templeRing/templeR0002.png') )
+imgLeft = (cv2.imread('dataset_templeRing/templeR0001.png'))
+imgRight = (cv2.imread('dataset_templeRing/templeR0002.png'))
 
 try:
     method = sys.argv[3]
@@ -70,29 +70,31 @@ K = np.array([[1520.4, 0., 302.32],
            [0, 0, 1]])
 
 parametri = []
-parameter_file = open ('dataset_templeRing/templeR_par.txt','r')
+parameter_file = open('dataset_templeRing/templeR_par.txt', 'r')
+
 for line in parameter_file:
     row = [float(j) for j in line[107:378].split()]
     parametri.append(row)
-parametri=np.array(parametri)
-parametri = np.delete(parametri, (0), axis=0)
-# print parametri
 
+parametri = np.array(parametri)
+parametri = np.delete(parametri, (0), axis=0)  #remove useless header
+
+# print parametri
 R = []
 for i in range(9):
     val = parametri[1][i]- parametri[0][i]
     R.append(val)
-R =np.array(R)
-R = R.reshape(3,3)
+R = np.array(R)
+R = R.reshape(3, 3)
 
 T = []
 for i in range(3):
-    val = parametri[1][i+9]- parametri[0][i+9]
+    val = parametri[1][i+9]-parametri[0][i+9]
     T.append(val)
 T = np.array(T)
 
-d1= np.zeros((2,2))
-d2= np.zeros((2,2))
+d1 = np.zeros((2, 2))
+d2 = np.zeros((2, 2))
 
 cv.StereoRectify(K,K,d1,d2,imgLeft.size,R,T)
 
