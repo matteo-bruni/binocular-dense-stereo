@@ -68,13 +68,20 @@ def main():
     ##############################################################################################
 
 
-    # Show images
-    cv2.imshow("disparity", disparity)
-    cv2.imshow("left1", img_left)
-    cv2.imshow("right2", img_right)
-    cv2.imshow("rectified_left", left_rectified)
-    cv2.imshow("rectified_right", right_rectified)
+    pre_rectify = np.hstack((img_left, img_right))
+    after_rectify = np.hstack((left_rectified, right_rectified))
+    total = np.vstack((pre_rectify, after_rectify))
+    cv2.imshow("PreAfterRectify", total)
     cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+    #
+    # # Show images
+    # cv2.imshow("disparity", disparity)
+    # cv2.imshow("left1", img_left)
+    # cv2.imshow("right2", img_right)
+    # cv2.imshow("rectified_left", left_rectified)
+    # cv2.imshow("rectified_right", right_rectified)
 
     # cv2.reprojectImageTo3D()
 
