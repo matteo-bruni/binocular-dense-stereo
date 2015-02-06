@@ -23,10 +23,8 @@ def get_RT(parameter_mat, n_img_left, n_img_right):
         val = parameter_mat[n_img_right-1][i+9]-parameter_mat[n_img_left-1][i+9]
         T.append(val)
     T = np.array(T)
-    d1 = np.zeros((5, 1))
-    d2 = np.zeros((5, 1))
 
-    return R, T, d1, d2, R1, R2
+    return R, T, R1, R2
 
 
 def getDisparity(imgLeft, imgRight, method="BM"):
@@ -100,6 +98,9 @@ K = np.array([[1520.4, 0., 302.32],
            [0, 1525.9, 246.87],
            [0, 0, 1]])
 
+# images are distorsion free
+d = np.zeros((5, 1))
+
 parametri = []
 parameter_file = open('dataset_templeRing/templeR_par.txt', 'r')
 
@@ -114,14 +115,14 @@ parametri = np.delete(parametri, (0), axis=0)  #remove useless header
 
 # Get Rotation Matrix and T of right images from the left one
 # r_left and r_right are the original rotation matrix
-R, T, d1, d2, r_left, r_right = get_RT(parametri, int(left_img_number), int(right_img_number))
+R, T, r_left, r_right = get_RT(parametri, int(left_img_number), int(right_img_number))
 
 # Compute stereo Rectification
-R1, R2, P1, P2, Q, roi1, roi2 = cv2.stereoRectify(K, d1, K, d2, (height, width), R, T, alpha=0)
+R1, R2, P1, P2, Q, roi1, roi2 = cv2.stereoRectify(K, d, K, d, (height, width), R, T, alpha=0)
 
 # Get map rectification
-map_left1, map_left2 = cv2.initUndistortRectifyMap(K, d1, R1, P1, (height, width), 5)
-map_right1, map_right2 = cv2.initUndistortRectifyMap(K, d1, R2, P2, (height, width), 5)
+map_left1, map_left2 = cv2.initUndistortRectifyMap(K, d, R1, P1, (height, width), 5)
+map_right1, map_right2 = cv2.initUndistortRectifyMap(K, d, R2, P2, (height, width), 5)
 # Apply Rectification
 left_rectified = cv2.remap(imgLeft, map_left1, map_left2, cv2.INTER_CUBIC)
 right_rectified = cv2.remap(imgRight, map_right1, map_right2, cv2.INTER_CUBIC)
