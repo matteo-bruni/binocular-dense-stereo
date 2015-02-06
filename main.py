@@ -129,7 +129,7 @@ right_rectified = cv2.remap(imgRight, map_right1, map_right2, cv2.INTER_CUBIC)
 
 # Show images
 cv2.imshow("left", left_rectified)
-cv2.imshow("right", left_rectified)
+cv2.imshow("right", right_rectified)
 cv2.waitKey(0)
 
 # cv2.reprojectImageTo3D()
