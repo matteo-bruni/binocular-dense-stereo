@@ -3,7 +3,7 @@ import numpy as np
 
 import cv2
 
-from utils import get_rot_trans_matrix_img2_wrt_img1, get_disparity, rotate_img
+from utils import get_rot_trans_matrix_img2_wrt_img1, get_disparity, rotate_img, write_ply
 
 
 ROTATE = False
@@ -70,6 +70,22 @@ def main():
     disparity = get_disparity(left_rectified, right_rectified, disparity_method)
     ##############################################################################################
 
+    # Project to 3d
+    print 'generating 3d point cloud...'
+
+    points = cv2.reprojectImageTo3D(disparity, Q)
+    colors = cv2.cvtColor(left_rectified, cv2.COLOR_BGR2RGB)
+    mask = disparity > disparity.min()
+    out_points = points[mask]
+    out_colors = colors[mask]
+    out_fn = 'out.ply'
+    write_ply('out.ply', out_points, out_colors)
+    print '%s saved' % 'out.ply'
+
+
+    ##############################################################################################
+    # Show Images
+    ##############################################################################################
     if ROTATE:
 
         pre_rectify = np.hstack((rotate_img(img_left, 90), (rotate_img(img_right, 90))))

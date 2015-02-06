@@ -6,6 +6,27 @@ from cv2 import cv as cv
 __author__ = 'hunter'
 
 
+ply_header = '''ply
+format ascii 1.0
+element vertex %(vert_num)d
+property float x
+property float y
+property float z
+property uchar red
+property uchar green
+property uchar blue
+end_header
+'''
+
+def write_ply(fn, verts, colors):
+    verts = verts.reshape(-1, 3)
+    colors = colors.reshape(-1, 3)
+    verts = np.hstack([verts, colors])
+    with open(fn, 'w') as f:
+        f.write(ply_header % dict(vert_num=len(verts)))
+        np.savetxt(f, verts, '%f %f %f %d %d %d')
+
+
 def get_rot_trans_matrix_img2_wrt_img1(dataset_calibration_info, n_img_left, n_img_right):
     r1 = np.array(dataset_calibration_info[n_img_left - 1][0:9]).reshape(3, 3)
     r2 = np.array(dataset_calibration_info[n_img_right - 1][0:9]).reshape(3, 3)
