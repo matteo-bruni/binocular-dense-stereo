@@ -47,12 +47,13 @@ def main():
     # Get Rotation Matrix and T of right images from the left one
     # r_left and r_right are the original rotation matrix
     R, T = get_rot_trans_matrix_img2_wrt_img1(all_images_parameters, int(left_img_number), int(right_img_number))
+    img_shape_rectified = (width, height)
     # Compute stereo Rectification
-    R1, R2, P1, P2, Q, roi1, roi2 = cv2.stereoRectify(K, d, K, d, img_shape, R, T, alpha=0)
+    R1, R2, P1, P2, Q, roi1, roi2 = cv2.stereoRectify(K, d, K, d, img_shape_rectified, R, T, alpha=0)
 
     # Get map rectification
-    map_left1, map_left2 = cv2.initUndistortRectifyMap(K, d, R1, P1, img_shape, cv2.CV_32FC1)
-    map_right1, map_right2 = cv2.initUndistortRectifyMap(K, d, R2, P2, img_shape, cv2.CV_32FC1)
+    map_left1, map_left2 = cv2.initUndistortRectifyMap(K, d, R1, P1, img_shape_rectified, cv2.CV_32FC1)
+    map_right1, map_right2 = cv2.initUndistortRectifyMap(K, d, R2, P2, img_shape_rectified, cv2.CV_32FC1)
 
     # Apply Rectification
     left_rectified = cv2.remap(img_left, map_left1, map_left2, cv2.INTER_NEAREST)
@@ -70,8 +71,10 @@ def main():
 
     pre_rectify = np.hstack((img_left, img_right))
     after_rectify = np.hstack((left_rectified, right_rectified))
-    total = np.vstack((pre_rectify, after_rectify))
-    cv2.imshow("PreAfterRectify", total)
+    # total = np.vstack((pre_rectify, after_rectify))
+    cv2.imshow("PreRectify", pre_rectify)
+    cv2.imshow("AfterRectify", after_rectify)
+
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
