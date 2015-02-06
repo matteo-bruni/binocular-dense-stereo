@@ -8,6 +8,7 @@ from utils import get_rot_trans_matrix_img2_wrt_img1, get_disparity, rotate_img,
 
 ROTATE = True
 
+
 def main():
     # Choose images
     left_img_number = "01"
@@ -75,74 +76,80 @@ def main():
 
     points = cv2.reprojectImageTo3D(disparity, Q)
 
-    print "3d shape", points.shape
 
-    temp_points= points.reshape(-1, 3)
-    x_plot = temp_points[:, 0]
-    y_plot = temp_points[:, 1]
-    z_plot = temp_points[:, 2]
 
-    from matplotlib.pyplot import plot, axis, show, imshow, figure, gray
-    print "3D Plot"
-    # 3D plot
-    from mpl_toolkits.mplot3d import axes3d
-
-    colors = cv2.cvtColor(left_rectified, cv2.COLOR_BGR2RGB)
-    mask = disparity > disparity.min()
-    out_points = points[mask]
-    out_colors = colors[mask]
-
-    fig = figure()
-    ax = fig.gca(projection='3d')
-    ax.plot(x_plot,y_plot,z_plot,'k.')
-
-    # ax.plot(points, 'k.')
-    axis('off')
-
+    ## tentativo matplotlib
+    # print "3d shape", points.shape
+    # temp_points= points.reshape(-1, 3)
+    # for t in temp_points:
+    #     if t[~np.isfinite(temp_points)]:
+    #         temp_points.remove(t)
     #
+    # x_plot = temp_points[:, 0]
+    # y_plot = temp_points[:, 1]
+    # z_plot = temp_points[:, 2]
+    #
+    # from matplotlib.pyplot import plot, axis, show, imshow, figure, gray
+    # print "3D Plot"
+    # # 3D plot
+    # from mpl_toolkits.mplot3d import axes3d
     # colors = cv2.cvtColor(left_rectified, cv2.COLOR_BGR2RGB)
     # mask = disparity > disparity.min()
     # out_points = points[mask]
     # out_colors = colors[mask]
-    # out_fn = 'out.ply'
-    # write_ply('out.ply', out_points, out_colors)
-    # print '%s saved' % 'out.ply'
+    #
+    # fig = figure()
+    # ax = fig.gca(projection='3d')
+    # ax.plot(x_plot,y_plot,z_plot,'k.')
+    # # ax.plot(points, 'k.')
+    # axis('off')
+
+
+    # Generate ply
+    #
+    colors = cv2.cvtColor(left_rectified, cv2.COLOR_BGR2RGB)
+    mask = disparity > disparity.min()
+    out_points = points[mask]
+    out_colors = colors[mask]
+    out_fn = 'out.ply'
+    write_ply('out.ply', out_points, out_colors)
+    print '%s saved' % 'out.ply'
 
 
     ##############################################################################################
     # Show Images
     ##############################################################################################
-    # if ROTATE:
+    if ROTATE:
+
+        pre_rectify = np.hstack((rotate_img(img_left, 90), (rotate_img(img_right, 90))))
+        after_rectify = np.hstack(((rotate_img(left_rectified, 90)), (rotate_img(right_rectified, 90))))
+        total = np.vstack((pre_rectify, after_rectify))
+
+    else:
+
+        pre_rectify = np.hstack((img_left, img_right))
+        after_rectify = np.hstack((left_rectified, right_rectified))
+        total = np.vstack((pre_rectify, after_rectify))
+
+
+    cv2.imshow("PreAfterRectify", total)
+    # cv2.imshow("disparity", disparity)
     #
-    #     pre_rectify = np.hstack((rotate_img(img_left, 90), (rotate_img(img_right, 90))))
-    #     after_rectify = np.hstack(((rotate_img(left_rectified, 90)), (rotate_img(right_rectified, 90))))
-    #     total = np.vstack((pre_rectify, after_rectify))
+    # cv2.imshow("PreRectify", pre_rectify)
+    # cv2.imshow("AfterRectify", after_rectify)
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
     #
-    # else:
-    #
-    #     pre_rectify = np.hstack((img_left, img_right))
-    #     after_rectify = np.hstack((left_rectified, right_rectified))
-    #     total = np.vstack((pre_rectify, after_rectify))
-    #
-    #
-    # cv2.imshow("PreAfterRectify", total)
-    # # cv2.imshow("disparity", disparity)
-    # #
-    # # cv2.imshow("PreRectify", pre_rectify)
-    # # cv2.imshow("AfterRectify", after_rectify)
-    #
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
-    #
-    # #
-    # # # Show images
-    # # cv2.imshow("disparity", disparity)
-    # # cv2.imshow("left1", img_left)
-    # # cv2.imshow("right2", img_right)
-    # # cv2.imshow("rectified_left", left_rectified)
-    # # cv2.imshow("rectified_right", right_rectified)
-    #
-    # # cv2.reprojectImageTo3D()
+    # # Show images
+    # cv2.imshow("disparity", disparity)
+    # cv2.imshow("left1", img_left)
+    # cv2.imshow("right2", img_right)
+    # cv2.imshow("rectified_left", left_rectified)
+    # cv2.imshow("rectified_right", right_rectified)
+
+    # cv2.reprojectImageTo3D()
 
 
 if __name__ == "__main__":
