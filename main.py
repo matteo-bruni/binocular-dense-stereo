@@ -26,7 +26,7 @@ def get_RT(parameter_mat, n_img_left, n_img_right):
     d1 = np.zeros((5, 1))
     d2 = np.zeros((5, 1))
 
-    return R, T, d1, d2
+    return R, T, d1, d2, R1, R2
 
 
 def getDisparity(imgLeft, imgRight, method="BM"):
@@ -86,8 +86,8 @@ except IndexError:
 disparity = getDisparity(imgLeft, imgRight, method)
 
 cv2.imshow("disparity", disparity)
-cv2.imshow("left", imgLeft)
-cv2.imshow("right", imgRight)
+cv2.imshow("left1", imgLeft)
+cv2.imshow("right2", imgRight)
 # cv2.waitKey(0)
 
 K = np.array([[1520.4, 0., 302.32],
@@ -104,7 +104,7 @@ for line in parameter_file:
 parametri = np.array(parametri)
 parametri = np.delete(parametri, (0), axis=0)  #remove useless header
 
-R,T,d1,d2 = get_RT(parametri, 1, 2)
+R,T,d1,d2, r_left, r_right = get_RT(parametri, 1, 2)
 
 
 height, width, depth = imgLeft.shape
