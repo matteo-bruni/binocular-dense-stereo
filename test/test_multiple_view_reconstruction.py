@@ -13,13 +13,13 @@ K = array([[2394, 0, 932], [0, 2398, 628], [0, 0, 1]])
 
 print "computing sift.."
 # load images and compute features
-im1 = array(Image.open('dataset_alcatraz/alcatraz1.jpg'))
-sift.process_image('dataset_alcatraz/alcatraz1.jpg', 'dataset_alcatraz/alcatraz1.sift')
+im1 = array(Image.open('../dataset_alcatraz/alcatraz1.jpg'))
+sift.process_image('../dataset_alcatraz/alcatraz1.jpg', '../dataset_alcatraz/alcatraz1.sift')
 l1, d1 = sift.read_features_from_file('dataset_alcatraz/alcatraz1.sift')
 
-im2 = array(Image.open('dataset_alcatraz/alcatraz2.jpg'))
-sift.process_image('dataset_alcatraz/alcatraz2.jpg', 'dataset_alcatraz/alcatraz2.sift')
-l2, d2 = sift.read_features_from_file('dataset_alcatraz/alcatraz2.sift')
+im2 = array(Image.open('../dataset_alcatraz/alcatraz2.jpg'))
+sift.process_image('../dataset_alcatraz/alcatraz2.jpg', '../dataset_alcatraz/alcatraz2.sift')
+l2, d2 = sift.read_features_from_file('../dataset_alcatraz/alcatraz2.sift')
 
 print "sift.. done"
 
