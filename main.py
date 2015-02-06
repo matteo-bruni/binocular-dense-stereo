@@ -11,27 +11,16 @@ def main():
     left_img_number = "01"
     right_img_number = "02"
 
-    imgLeft = (cv2.imread('dataset_templeRing/templeR00%s.png' % left_img_number))
-    imgRight = (cv2.imread('dataset_templeRing/templeR00%s.png' % right_img_number))
-    height, width, depth = imgLeft.shape
+    # Load images
+    img_left = cv2.imread('dataset_templeRing/templeR00%s.png' % left_img_number)
+    img_right = cv2.imread('dataset_templeRing/templeR00%s.png' % right_img_number)
 
-    try:
-        method = sys.argv[3]
-    except IndexError:
-        method = "SGBM"
+    height, width, depth = img_left.shape
 
-    disparity = get_disparity(imgLeft, imgRight, method)
-
-    cv2.imshow("disparity", disparity)
-    cv2.imshow("left1", imgLeft)
-    cv2.imshow("right2", imgRight)
-    # cv2.waitKey(0)
-
-    ###############################
+    ##############################################################################################
     # Load Calibration Information
-    ###############################
-
-    # Calibration Matrix
+    ##############################################################################################
+    # Calibration Matrix - same for each image
     K = np.array([[1520.4, 0., 302.32],
                   [0, 1525.9, 246.87],
                   [0, 0, 1]])
@@ -39,16 +28,21 @@ def main():
     # images are distorsion free
     d = np.zeros((5, 1))
 
-    # Images Calibration
+    ##############################################################################################
+    # Load Images Calibration from file
+    ##############################################################################################
     calibration_file = open('dataset_templeRing/templeR_par.txt', 'r')
     all_images_parameters = []
     for line in calibration_file:
         row = [float(j) for j in line[107:378].split()]
         all_images_parameters.append(row)
     calibration_file.close()
-
     all_images_parameters = np.array(all_images_parameters[1:])  # remove useless header
+    ##############################################################################################
 
+    ##############################################################################################
+    # Rectify images
+    ##############################################################################################
     # Get Rotation Matrix and T of right images from the left one
     # r_left and r_right are the original rotation matrix
     R, T = get_rot_trans_matrix_img2_wrt_img1(all_images_parameters, int(left_img_number), int(right_img_number))
@@ -58,11 +52,25 @@ def main():
     # Get map rectification
     map_left1, map_left2 = cv2.initUndistortRectifyMap(K, d, R1, P1, (height, width), cv2.CV_32FC1)
     map_right1, map_right2 = cv2.initUndistortRectifyMap(K, d, R2, P2, (height, width), cv2.CV_32FC1)
+
     # Apply Rectification
-    left_rectified = cv2.remap(imgLeft, map_left1, map_left2, cv2.INTER_NEAREST)
-    right_rectified = cv2.remap(imgRight, map_right1, map_right2, cv2.INTER_NEAREST)
+    left_rectified = cv2.remap(img_left, map_left1, map_left2, cv2.INTER_NEAREST)
+    right_rectified = cv2.remap(img_right, map_right1, map_right2, cv2.INTER_NEAREST)
+    ##############################################################################################
+
+    ##############################################################################################
+    # Compute disparity images
+    ##############################################################################################
+    # Compute disparity on rectified images
+    disparity_method = "SGBM"
+    disparity = get_disparity(left_rectified, right_rectified, disparity_method)
+    ##############################################################################################
+
 
     # Show images
+    cv2.imshow("disparity", disparity)
+    cv2.imshow("left1", img_left)
+    cv2.imshow("right2", img_right)
     cv2.imshow("rectified_left", left_rectified)
     cv2.imshow("rectified_right", right_rectified)
     cv2.waitKey(0)
