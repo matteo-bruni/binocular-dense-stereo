@@ -3,7 +3,7 @@ import numpy as np
 
 import cv2
 
-from utils import get_rot_trans_matrix_img2_wrt_img1, get_disparity
+from utils import get_rot_trans_matrix_img2_wrt_img1, get_disparity, rotate_img
 
 
 def main():
@@ -69,8 +69,8 @@ def main():
     ##############################################################################################
 
 
-    pre_rectify = np.hstack((img_left, img_right))
-    after_rectify = np.hstack((left_rectified, right_rectified))
+    pre_rectify = np.hstack((rotate_img(img_left, 90), (rotate_img(img_right, 90))))
+    after_rectify = np.hstack(((rotate_img(left_rectified, 90)), (rotate_img(right_rectified, 90))))
     total = np.vstack((pre_rectify, after_rectify))
 
     cv2.imshow("PreAfterRectify", total)

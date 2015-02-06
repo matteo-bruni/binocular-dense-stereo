@@ -65,3 +65,9 @@ def get_disparity(imgLeft, imgRight, method="BM"):
         disparity_visual = cv2.normalize(disparity, alpha=0, beta=255, norm_type=cv2.cv.CV_MINMAX, dtype=cv2.cv.CV_8U)
 
     return disparity_visual
+
+
+def rotate_img(img, angle):
+    rows, cols, _ = img.shape
+    M = cv2.getRotationMatrix2D((cols/2, rows/2), angle, 1)
+    return cv2.warpAffine(img, M, (cols, rows))
