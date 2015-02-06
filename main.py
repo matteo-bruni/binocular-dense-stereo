@@ -16,6 +16,7 @@ def main():
     img_right = cv2.imread('dataset_templeRing/templeR00%s.png' % right_img_number)
 
     height, width, depth = img_left.shape
+    img_shape = (width, height)
 
     ##############################################################################################
     # Load Calibration Information
@@ -47,11 +48,11 @@ def main():
     # r_left and r_right are the original rotation matrix
     R, T = get_rot_trans_matrix_img2_wrt_img1(all_images_parameters, int(left_img_number), int(right_img_number))
     # Compute stereo Rectification
-    R1, R2, P1, P2, Q, roi1, roi2 = cv2.stereoRectify(K, d, K, d, (height, width), R, T, alpha=0)
+    R1, R2, P1, P2, Q, roi1, roi2 = cv2.stereoRectify(K, d, K, d, img_shape, R, T, alpha=0)
 
     # Get map rectification
-    map_left1, map_left2 = cv2.initUndistortRectifyMap(K, d, R1, P1, (height, width), cv2.CV_32FC1)
-    map_right1, map_right2 = cv2.initUndistortRectifyMap(K, d, R2, P2, (height, width), cv2.CV_32FC1)
+    map_left1, map_left2 = cv2.initUndistortRectifyMap(K, d, R1, P1, img_shape, cv2.CV_32FC1)
+    map_right1, map_right2 = cv2.initUndistortRectifyMap(K, d, R2, P2, img_shape, cv2.CV_32FC1)
 
     # Apply Rectification
     left_rectified = cv2.remap(img_left, map_left1, map_left2, cv2.INTER_NEAREST)
