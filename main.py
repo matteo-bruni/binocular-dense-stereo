@@ -98,6 +98,26 @@ d2 = np.zeros((2, 2))
 
 cv.StereoRectify(K,K,d1,d2,imgLeft.size,R,T)
 
+
+
+# #templeR0002.png 1520.400000 0.000000 302.320000 0.000000 1525.900000 246.870000 0.000000 0.000000 1.000000 0.00272557078828676410 0.98353557606148900000 -0.18069405603193772000 0.99651741905514424000 -0.01773058775937118300 -0.08147797111723514800 -0.08334029507718225500 -0.17984270037758626000 -0.98015865977776562000 -0.0288222339759 -0.0306361018019 0.525505113107
+# #"imgname.png k11 k12 k13 k21 k22 k23 k31 k32 k33 r11 r12 r13 r21 r22 r23 r31 r32 r33 t1 t2 t3"
+# #The projection matrix for that image is given by K*[R t]
+#
+# (CM1, CM2, D1, D2, R, T, E, F) = loadCalibration(calibdir)
+# # CM 3x3 -> K
+# # D 1x5  ->
+# # R 3x3
+# # T 3x1
+# # E 3x3
+# # F 3x3
+#
+# R1, R2, P1, P2, Q, roi1, roi2 = cv2.stereoRectify(CM1, D1, CM2, D2, image_size, R, T, alpha=0)
+
+
+
+
+
 #
 # objpts=[]
 # objPoints = []
