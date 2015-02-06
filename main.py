@@ -5,17 +5,11 @@ import numpy as np
 import scipy.spatial
 from numpy.linalg import inv
 
-def get_RT(parameter_mat,n_img):
 
-    R = []
-    R1 = []
-    R2 = []
+def get_RT(parameter_mat, n_img_left, n_img_right):
 
-    R1 = np.array(parameter_mat[0][0:9]).reshape(3,3)
-    R2 = np.array(parameter_mat[n_img-1][0:9]).reshape(3,3)
-
-
-
+    R1 = np.array(parameter_mat[n_img_left-1][0:9]).reshape(3, 3)
+    R2 = np.array(parameter_mat[n_img_right-1][0:9]).reshape(3, 3)
     R = R2 * inv(R1)
 
     # for i in range(9):
@@ -26,14 +20,13 @@ def get_RT(parameter_mat,n_img):
 
     T = []
     for i in range(3):
-        val = parameter_mat[n_img-1][i+9]-parameter_mat[0][i+9]
+        val = parameter_mat[n_img_right-1][i+9]-parameter_mat[n_img_left-1][i+9]
         T.append(val)
     T = np.array(T)
+    d1 = np.zeros((5, 1))
+    d2 = np.zeros((5, 1))
 
-    d1 = np.zeros((2, 2))
-    d2 = np.zeros((2, 2))
-
-    return R,T,d1,d2
+    return R, T, d1, d2
 
 
 def getDisparity(imgLeft, imgRight, method="BM"):
@@ -94,7 +87,7 @@ disparity = getDisparity(imgLeft, imgRight, method)
 cv2.imshow("disparity", disparity)
 cv2.imshow("left", imgLeft)
 cv2.imshow("right", imgRight)
-cv2.waitKey(0)
+# cv2.waitKey(0)
 
 K = np.array([[1520.4, 0., 302.32],
            [0, 1525.9, 246.87],
@@ -110,11 +103,11 @@ for line in parameter_file:
 parametri = np.array(parametri)
 parametri = np.delete(parametri, (0), axis=0)  #remove useless header
 
-R,T,d1,d2 = get_RT(parametri,2)
+R,T,d1,d2 = get_RT(parametri, 1, 2)
 
 
-
-
+height, width, depth = imgLeft.shape
+R1, R2, P1, P2, Q, roi1, roi2 = cv2.stereoRectify(K, d1, K, d2, (height, width), R, T, alpha=0)
 
 # #templeR0002.png 1520.400000 0.000000 302.320000 0.000000 1525.900000 246.870000 0.000000 0.000000 1.000000 0.00272557078828676410 0.98353557606148900000 -0.18069405603193772000 0.99651741905514424000 -0.01773058775937118300 -0.08147797111723514800 -0.08334029507718225500 -0.17984270037758626000 -0.98015865977776562000 -0.0288222339759 -0.0306361018019 0.525505113107
 # #"imgname.png k11 k12 k13 k21 k22 k23 k31 k32 k33 r11 r12 r13 r21 r22 r23 r31 r32 r33 t1 t2 t3"
