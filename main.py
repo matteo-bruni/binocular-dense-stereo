@@ -10,7 +10,7 @@ def get_RT(parameter_mat, n_img_left, n_img_right):
 
     R1 = np.array(parameter_mat[n_img_left-1][0:9]).reshape(3, 3)
     R2 = np.array(parameter_mat[n_img_right-1][0:9]).reshape(3, 3)
-    R = R2 * inv(R1)
+    R = np.dot(R2, inv(R1))
 
     # for i in range(9):
     #     val = parametri[1][i]- parametri[0][i]
@@ -21,7 +21,7 @@ def get_RT(parameter_mat, n_img_left, n_img_right):
     T2 = np.array(parameter_mat[n_img_right-1][9:12]).reshape(3, 1)
 
 
-    T = T1-(inv(R)*(T2))
+    T = T1-np.dot(inv(R), T2)
     print T.shape
 
     # for i in range(3):
@@ -141,8 +141,8 @@ right_rectified = cv2.remap(imgRight, map_right1, map_right2, cv2.INTER_NEAREST)
 
 
 # Show images
-cv2.imshow("left", left_rectified)
-cv2.imshow("right", right_rectified)
+cv2.imshow("rectified_left", left_rectified)
+cv2.imshow("rectified_right", right_rectified)
 cv2.waitKey(0)
 
 # cv2.reprojectImageTo3D()
