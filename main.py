@@ -6,6 +6,8 @@ import cv2
 from utils import get_rot_trans_matrix_img2_wrt_img1, get_disparity, rotate_img
 
 
+ROTATE = False
+
 def main():
     # Choose images
     left_img_number = "01"
@@ -68,10 +70,18 @@ def main():
     disparity = get_disparity(left_rectified, right_rectified, disparity_method)
     ##############################################################################################
 
+    if ROTATE:
 
-    pre_rectify = np.hstack((rotate_img(img_left, 90), (rotate_img(img_right, 90))))
-    after_rectify = np.hstack(((rotate_img(left_rectified, 90)), (rotate_img(right_rectified, 90))))
-    total = np.vstack((pre_rectify, after_rectify))
+        pre_rectify = np.hstack((rotate_img(img_left, 90), (rotate_img(img_right, 90))))
+        after_rectify = np.hstack(((rotate_img(left_rectified, 90)), (rotate_img(right_rectified, 90))))
+        total = np.vstack((pre_rectify, after_rectify))
+
+    else:
+
+        pre_rectify = np.hstack((img_left, img_right))
+        after_rectify = np.hstack((left_rectified, right_rectified))
+        total = np.vstack((pre_rectify, after_rectify))
+
 
     cv2.imshow("PreAfterRectify", total)
     #
