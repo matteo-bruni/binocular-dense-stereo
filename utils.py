@@ -72,15 +72,15 @@ def get_disparity(imgLeft, imgRight, method="BM"):
 
     elif method == "SGBM":
         sbm = cv2.StereoSGBM()
-        sbm.SADWindowSize = 90  # Matched block size. It must be an odd number >=1 . Normally, it should be somewhere in the 3..11 range.
-        sbm.numberOfDisparities = 16  # con valori piu alti tipo 112 viene il contorno nero
-        sbm.preFilterCap = 1
-        sbm.minDisparity = -21  # con altri valori smongola
-        sbm.uniquenessRatio = 7
-        sbm.speckleWindowSize = 20
-        sbm.speckleRange = 20
+        sbm.SADWindowSize = 5  # Matched block size. It must be an odd number >=1 . Normally, it should be somewhere in the 3..11 range.
+        sbm.numberOfDisparities = 112  # con valori piu alti tipo 112 viene il contorno nero
+        sbm.preFilterCap = 60
+        sbm.minDisparity = 1  # con altri valori smongola
+        sbm.uniquenessRatio = 11
+        sbm.speckleWindowSize = 0
+        sbm.speckleRange = 0
         sbm.disp12MaxDiff = 1
-        sbm.fullDP = True  # a True runna il full-scale two-pass dynamic programming algorithm
+        sbm.fullDP = False  # a True runna il full-scale two-pass dynamic programming algorithm
 
         disparity = sbm.compute(gray_left, gray_right)
         disparity_visual = cv2.normalize(disparity, alpha=0, beta=255, norm_type=cv2.cv.CV_MINMAX, dtype=cv2.cv.CV_8U)

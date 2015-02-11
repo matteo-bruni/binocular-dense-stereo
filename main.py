@@ -1,10 +1,10 @@
 import sys
 import numpy as np
-
+from pcl import registration
 import cv2
+import pcl
 
 from utils import get_rot_trans_matrix_img2_wrt_img1, get_disparity, rotate_img, write_ply
-
 
 ROTATE = True
 
@@ -54,6 +54,11 @@ def main():
     # Compute stereo Rectification
     R1, R2, P1, P2, Q, roi1, roi2 = cv2.stereoRectify(K, d, K, d, img_shape, R, T, alpha=-1)
 
+    Q = np.float32([[1, 0, 0, -0.5*width],
+                    [0,-1, 0,  0.5*height], # turn points 180 deg around x-axis,
+                    [0, 0, 0,  0.8*width], # so that y-axis looks up
+                    [0, 0, 1,   0]])
+
     # Get map rectification
     map_left1, map_left2 = cv2.initUndistortRectifyMap(K, d, R1, P1, img_shape, cv2.CV_32FC1)
     map_right1, map_right2 = cv2.initUndistortRectifyMap(K, d, R2, P2, img_shape, cv2.CV_32FC1)
@@ -77,6 +82,9 @@ def main():
     points = cv2.reprojectImageTo3D(disparity, Q)
 
 
+
+
+    #cv2.triangulatePoints(P1, P2, points[1], points[2])
 
     ## tentativo matplotlib
     # print "3d shape", points.shape
@@ -107,6 +115,7 @@ def main():
 
     # Generate ply
     #
+
     colors = cv2.cvtColor(left_rectified, cv2.COLOR_BGR2RGB)
     mask = disparity > disparity.min()
     out_points = points[mask]
@@ -114,6 +123,20 @@ def main():
     out_fn = 'out.ply'
     write_ply('out.ply', out_points, out_colors)
     print '%s saved' % 'out.ply'
+
+
+
+    p = pcl.PointCloud()
+    p._from_ply_file("out.ply")
+    p.to_file("out2.pcd")
+
+    # print "first cloud done..."
+    # p2 = pcl.PointCloud()
+    # p2._from_ply_file("out.ply")
+    # print "second cloud done..."
+    #
+    # icp = registration.icp(p,p2,10)
+    # print icp
 
 
     ##############################################################################################
