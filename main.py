@@ -1,10 +1,13 @@
 import sys
+from matplotlib.pyplot import figure
 import numpy as np
 from pcl import registration
 import cv2
 import pcl
+import vtk
 
 from utils import get_rot_trans_matrix_img2_wrt_img1, get_disparity, rotate_img, write_ply
+from vtk_test import VtkPointCloud, load_data_np
 
 ROTATE = True
 
@@ -78,57 +81,56 @@ def main():
 
     # Project to 3d
     print 'generating 3d point cloud...'
-
     points = cv2.reprojectImageTo3D(disparity, Q)
 
 
-
-
-    #cv2.triangulatePoints(P1, P2, points[1], points[2])
-
-    ## tentativo matplotlib
-    # print "3d shape", points.shape
-    # temp_points= points.reshape(-1, 3)
-    # for t in temp_points:
-    #     if t[~np.isfinite(temp_points)]:
-    #         temp_points.remove(t)
-    #
-    # x_plot = temp_points[:, 0]
-    # y_plot = temp_points[:, 1]
-    # z_plot = temp_points[:, 2]
-    #
-    # from matplotlib.pyplot import plot, axis, show, imshow, figure, gray
-    # print "3D Plot"
-    # # 3D plot
-    # from mpl_toolkits.mplot3d import axes3d
-    # colors = cv2.cvtColor(left_rectified, cv2.COLOR_BGR2RGB)
-    # mask = disparity > disparity.min()
-    # out_points = points[mask]
-    # out_colors = colors[mask]
-    #
-    # fig = figure()
-    # ax = fig.gca(projection='3d')
-    # ax.plot(x_plot,y_plot,z_plot,'k.')
-    # # ax.plot(points, 'k.')
-    # axis('off')
-
-
-    # Generate ply
-    #
-
+    ## PLOT 3D CLOUD
     colors = cv2.cvtColor(left_rectified, cv2.COLOR_BGR2RGB)
     mask = disparity > disparity.min()
     out_points = points[mask]
     out_colors = colors[mask]
-    out_fn = 'out.ply'
-    write_ply('out.ply', out_points, out_colors)
-    print '%s saved' % 'out.ply'
+    out_points = out_points.reshape(-1, 3)
+    out_colors = out_colors.reshape(-1, 3)
+    # if we want to stack in a vector
+    # out_points = np.hstack([out_points, out_colors])
 
 
+    pointCloud = VtkPointCloud()
+    # pointCloud=load_data(sys.argv[1],pointCloud)
+    pointCloud = load_data_np(pointCloud, out_points, out_colors)
+    pointCloud.setColors()
+    # Renderer
+    renderer = vtk.vtkRenderer()
+    renderer.AddActor(pointCloud.vtkActor)
+    #renderer.SetBackground(.2, .3, .4)
+    renderer.SetBackground(0.0, 0.0, 0.0)
+    renderer.ResetCamera()
+    # Render Window
+    renderWindow = vtk.vtkRenderWindow()
+    renderWindow.AddRenderer(renderer)
+    # Interactor
+    renderWindowInteractor = vtk.vtkRenderWindowInteractor()
+    renderWindowInteractor.SetRenderWindow(renderWindow)
+    # Begin Interaction
+    renderWindow.Render()
+    renderWindow.SetWindowName("XYZ Data Viewer:")
+    renderWindowInteractor.Start()
 
-    p = pcl.PointCloud()
-    p._from_ply_file("out.ply")
-    p.to_file("out2.pcd")
+
+    # Generate ply
+    #
+    #
+    # colors = cv2.cvtColor(left_rectified, cv2.COLOR_BGR2RGB)
+    # mask = disparity > disparity.min()
+    # out_points = points[mask]
+    # out_colors = colors[mask]
+    # out_fn = 'out.ply'
+    # write_ply('out.ply', out_points, out_colors)
+    # print '%s saved' % 'out.ply'
+    #
+    # p = pcl.PointCloud()
+    # p._from_ply_file("out.ply")
+    # p.to_file("out2.pcd")
 
     # print "first cloud done..."
     # p2 = pcl.PointCloud()
@@ -142,29 +144,30 @@ def main():
     ##############################################################################################
     # Show Images
     ##############################################################################################
-    if ROTATE:
-
-        pre_rectify = np.hstack((rotate_img(img_left, 90), (rotate_img(img_right, 90))))
-        after_rectify = np.hstack(((rotate_img(left_rectified, 90)), (rotate_img(right_rectified, 90))))
-        total = np.vstack((pre_rectify, after_rectify))
-
-    else:
-
-        pre_rectify = np.hstack((img_left, img_right))
-        after_rectify = np.hstack((left_rectified, right_rectified))
-        total = np.vstack((pre_rectify, after_rectify))
-
-
-    cv2.imshow("PreAfterRectify", total)
-    # cv2.imshow("disparity", disparity)
+    # if ROTATE:
     #
-    # cv2.imshow("PreRectify", pre_rectify)
-    # cv2.imshow("AfterRectify", after_rectify)
-
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
+    #     pre_rectify = np.hstack((rotate_img(img_left, 90), (rotate_img(img_right, 90))))
+    #     after_rectify = np.hstack(((rotate_img(left_rectified, 90)), (rotate_img(right_rectified, 90))))
+    #     total = np.vstack((pre_rectify, after_rectify))
     #
+    # else:
+    #
+    #     pre_rectify = np.hstack((img_left, img_right))
+    #     after_rectify = np.hstack((left_rectified, right_rectified))
+    #     total = np.vstack((pre_rectify, after_rectify))
+    #
+    #
+    # cv2.imshow("PreAfterRectify", total)
+    # # cv2.imshow("disparity", disparity)
+    # # cv2.imshow("PreRectify", pre_rectify)
+    # # cv2.imshow("AfterRectify", after_rectify)
+    #
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
+
+
+
     # # Show images
     # cv2.imshow("disparity", disparity)
     # cv2.imshow("left1", img_left)
@@ -193,4 +196,48 @@ if __name__ == "__main__":
 #
 # R1, R2, P1, P2, Q, roi1, roi2 = cv2.stereoRectify(CM1, D1, CM2, D2, image_size, R, T, alpha=0)
 
+
+
+
+    # # tentativo matplotlib
+    # #print "3d shape", points.shape
+    #
+    # # # cleanup
+    # # mask = disparity > disparity.min()
+    # # points = points[mask]
+    # temp_points= points.reshape(-1, 3)
+    # # #  remove nan files
+    # # temp_points = temp_points[~np.isnan(temp_points).any(axis=1)]
+    # # # remove infinite values
+    # # temp_points = temp_points[~np.isfinite(temp_points).any(axis=1)]
+    #
+    # x_plot = temp_points[:, 0]
+    # y_plot = temp_points[:, 1]
+    # z_plot = temp_points[:, 2]
+    #
+    # print x_plot.shape, y_plot.shape, z_plot.shape
+
+
+    # MAYAVI
+    # from mayavi.mlab import *
+    # t = np.linspace(0, 4 * np.pi, 20)
+    # cos = np.cos
+    # sin = np.sin
+    # x_plot = sin(2 * t)
+    # y_plot = cos(t)
+    # z_plot = cos(2 * t)
+    # s = 2 + sin(t)
+    # points3d(x_plot, y_plot, z_plot, s, colormap="copper", scale_factor=.25)
+
+    # MATPLOTLIB
+    # from mpl_toolkits.mplot3d import axes3d
+    #
+    # fig = figure()
+    # ax = fig.gca(projection='3d')
+    # # plot points in 3D
+    # ax.plot(x_plot, y_plot, z_plot,'o')
+    # import matplotlib.pyplot as plt
+    # plt.show()
+
+    #
 

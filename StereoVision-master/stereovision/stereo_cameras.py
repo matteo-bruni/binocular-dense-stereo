@@ -31,7 +31,7 @@ Classes:
 
 import cv2
 
-from stereovision.point_cloud import PointCloud
+from point_cloud import PointCloud
 
 
 class StereoPair(object):
